@@ -97,7 +97,7 @@ const Header = () => {
             <img src={rvsLogo} alt="RVS Logo" className="h-8 w-8 sm:h-12 sm:w-12" />
             <div className="flex flex-col">
               <span className="text-base sm:text-xl font-bold text-primary">RVS</span>
-              <span className="text-[10px] sm:text-xs text-muted-foreground hidden sm:block">
+              <span className="text-[10px] sm:text-xs text-white hidden sm:block">
                 Royal Value Solutions
               </span>
             </div>
