@@ -1,8 +1,8 @@
 const Footer = () => {
   return (
     <footer className="bg-[#0A0F1A] text-gray-300 pt-14 pb-8 mt-10">
-      <div className="container mx-auto px-4 grid md:grid-cols-4 gap-10">
-
+<div className="container mx-auto px-4 grid lg:grid-cols-4 sm:grid-cols-4 sm:gap-3 gap-10">
+  
         {/* Brand Section */}
         <div>
           <h2 className="text-2xl font-bold text-white tracking-wide">RVS</h2>
@@ -54,7 +54,7 @@ const Footer = () => {
             </li>
           </ul>
         </div>
-
+ 
         {/* Address */}
         <div>
           <h3 className="text-lg font-semibold text-white mb-3">Address</h3>

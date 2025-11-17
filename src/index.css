@@ -148,3 +148,82 @@ All colors MUST be HSL.
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
+
+
+                                                              /* added by own  */
+                                                              
+/* Entire screen fade-out */
+@keyframes fadeScreen {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+.welcome-overlay {
+  animation: fadeScreen 0.8s ease-out;
+}
+
+/* Flip + scale + opacity (same as motion: rotateY 180 → 0) */
+@keyframes flipIn {
+  0% {
+    transform: scale(0.5) rotateY(180deg);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) rotateY(0deg);
+    opacity: 1;
+  }
+}
+.animate-flipIn {
+  animation: flipIn 1.2s ease-out forwards;
+}
+
+/* Logo bounce + glow (same as motion) */
+@keyframes bounceGlow {
+  0%, 100% {
+    transform: translateY(0);
+    filter: drop-shadow(0 0 20px rgba(255,255,255,0.5));
+  }
+  50% {
+    transform: translateY(-20px);
+    filter: drop-shadow(0 0 40px rgba(255,255,255,0.8));
+  }
+}
+.animate-bounceGlow {
+  animation: bounceGlow 2s infinite;
+}
+
+/* Text slide up (same as motion initial y:30 → y:0) */
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+.animate-titleIn {
+  animation: slideUp 0.8s ease-out 0.5s forwards;
+  opacity: 0;
+}
+.animate-subIn {
+  animation: slideUp 0.8s ease-out 0.8s forwards;
+  opacity: 0;
+}
+
+/* Line scaleX animation (same as Framer Motion scaleX:0→1) */
+@keyframes lineGrow {
+  from {
+    transform: scaleX(0);
+    opacity: 0;
+  }
+  to {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+.animate-lineGrow {
+  transform-origin: center;
+  animation: lineGrow 0.8s ease-out 1.2s forwards;
+  opacity: 0;
+}

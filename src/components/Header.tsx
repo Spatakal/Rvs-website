@@ -2,12 +2,14 @@ import { useState, useEffect, useRef } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import rvsLogo from "@/assets/rvs-logo.png";
-import { motion, AnimatePresence } from "framer-motion";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const lastScrollY = useRef(0);
+  const menuRef = useRef(null);
+  const toggleRef = useRef(null);
+
 
   const navItems = [
     { label: "Home", href: "#home" },
@@ -28,6 +30,39 @@ const Header = () => {
     }
   };
 
+  /* Stop body scroll when menu is open */
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isMenuOpen]);
+
+  /* Close menu on clicking outside */
+ useEffect(() => {
+  const handleOutsideClick = (e) => {
+    if (
+      isMenuOpen &&
+      menuRef.current &&
+      !menuRef.current.contains(e.target) &&
+      toggleRef.current &&
+      !toggleRef.current.contains(e.target)
+    ) {
+      setIsMenuOpen(false);
+    }
+  };
+
+  document.addEventListener("mousedown", handleOutsideClick);
+  return () => document.removeEventListener("mousedown", handleOutsideClick);
+}, [isMenuOpen]);
+  
+
+  /* Header hide / show on scroll */
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
@@ -50,84 +85,76 @@ const Header = () => {
   }, []);
 
   return (
-    <motion.header
-      initial={{ y: 0 }}
-      animate={{ y: isVisible ? 0 : -100 }}
-      transition={{ duration: 0.3, ease: "easeInOut" }}
-      className="fixed top-0 left-0 right-0 z-50 glass-card border-b w-full max-w-full"
+    <header
+      className={`fixed top-0 left-0 right-0 z-40 bg-gradient-to-r from-[#0f172a]/95 via-[#1e293b]/90 to-[#0f172a]/95 backdrop-blur-xl shadow-md transition-transform duration-500 ${
+        isVisible ? "translate-y-0" : "-translate-y-full"
+      }`}
     >
-      <div className="container mx-auto px-3 /12 max-w-full">
+      <div className="container mx-auto px-3 max-w-full">
         <div className="flex items-center justify-between h-16 sm:h-20">
-          
           {/* Logo */}
           <div className="flex items-center gap-2 sm:gap-3">
-            <img
-              src={rvsLogo}
-              alt="RVS Logo"
-              className="h-8 w-8 sm:h-12 sm:w-12"
-            />
-            <div className="flex flex-col md:justify-center">
-              <span className="text-base sm:text-xl font-bold text-primary">
-                RVS
-              </span>
+            <img src={rvsLogo} alt="RVS Logo" className="h-8 w-8 sm:h-12 sm:w-12" />
+            <div className="flex flex-col">
+              <span className="text-base sm:text-xl font-bold text-primary">RVS</span>
               <span className="text-[10px] sm:text-xs text-muted-foreground hidden sm:block">
                 Royal Value Solutions
               </span>
             </div>
           </div>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-1">
+          {/* Desktop Nav */}
+          <nav className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
-              <Button
-                key={item.href}
-                variant="ghost"
+              <button
+                key={item.label}
                 onClick={() => scrollToSection(item.href)}
-                className="text-sm font-medium hover:text-white transition-colors"
+                className="text-white/90 hover:text-[#00e0ff] transition-colors font-medium"
               >
                 {item.label}
-              </Button>
+              </button>
             ))}
           </nav>
 
           {/* Mobile Menu Toggle */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="lg:hidden mr-2"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </Button>
+<Button
+  ref={toggleRef}
+  variant="ghost"
+  size="icon"
+  className="md:hidden text-white z-50"
+  onClick={() => setIsMenuOpen(!isMenuOpen)}
+>
+  {isMenuOpen ? (
+    <X className="w-6 h-6" />
+  ) : (
+    <Menu className="w-6 h-6" />
+  )}
+</Button>
+
+
         </div>
 
         {/* Mobile Navigation */}
-        <AnimatePresence>
-          {isMenuOpen && (
-            <motion.nav
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              className="lg:hidden pb-4"
-            >
-              <div className="flex flex-col gap-2 w-full">
-                {navItems.map((item) => (
-                  <Button
-                    key={item.href}
-                    variant="ghost"
-                    onClick={() => scrollToSection(item.href)}
-                    className="justify-start text-sm font-medium hover:text-primary w-full"
-                  >
-                    {item.label}
-                  </Button>
-                ))}
-              </div>
-            </motion.nav>
-          )}
-        </AnimatePresence>
-
+        {isMenuOpen && (
+          <nav
+            ref={menuRef}
+            className="md:hidden mt-4 pb-4 border-t border-white/10 bg-[#0f172a]/95 backdrop-blur-xl rounded-lg"
+          >
+            <div className="flex flex-col space-y-3 pt-4 px-2">
+              {navItems.map((item) => (
+                <button
+                  key={item.label}
+                  onClick={() => scrollToSection(item.href)}
+                  className="text-left py-2 px-2 text-white/90 hover:text-[#00e0ff] transition-colors font-medium"
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          </nav>
+        )}
       </div>
-    </motion.header>
+    </header>
   );
 };
 

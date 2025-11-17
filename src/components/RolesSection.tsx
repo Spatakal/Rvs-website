@@ -56,7 +56,7 @@ const roles = [
 
 export default function RolesSection() {
   return (
-    <section className="py-20 bg-muted/30">
+    <section className="py-20 bg-muted/30" id="roles">
       <div className="container mx-auto px-4 flex flex-col items-center">
         {/* HEADER */}
         <div className="text-center mb-16 max-w-2xl">
